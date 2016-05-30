@@ -1,0 +1,39 @@
+<div class="main light" ng-controller="LoginController">
+  <div id="body" class="container">
+    
+
+<p style="color:red;">{{error.error}}</p>
+
+    <table width="25%">
+      <form novalidate class="simple-form">
+        <tr>
+          <td>
+            <h1>Welcome</h1>
+          </td>
+
+        </tr>
+        <tr><td>
+            <input ng-model="user.email" type="text" name="email" size="25%" value="" placeholder="Email">
+          </td>
+        </tr>
+        <tr><td>
+            <input ng-model="user.password" type="password" name="password" size="25%" value="" placeholder="Password"
+                   onkeydown="if (event.keyCode == 13)
+                                document.getElementById('login').click()">
+          </td>
+        </tr>
+        <tr><td>
+            <input id="login" ng-click="login(user)" type="submit" value="Login">
+          </td>
+        </tr>
+        <tr><td>
+            <span class="small" style="float:right;"><a href="#/forget">Forgot</a> / <a href="#/register">Register</a>
+            </span>
+
+          </td>
+        </tr>
+      </form>
+    </table>
+
+  </div>
+  </div>

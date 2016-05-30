@@ -1,0 +1,41 @@
+<div class="main light" ng-controller="LoginController">
+  <div id="body" class="container">
+
+<table width="25%">
+  <form novalidate class="simple-form">
+    <tr>
+      <td>
+        <h1>Welcome</h1>
+      </td>
+
+    </tr>
+    <tr><td>
+        <input ng-model="user.email" type="text" name="email" size="25%" value="" placeholder="Email">
+      </td>
+    </tr>
+    <tr><td>
+        <input ng-model="user.nick" type="text" name="nick" size="25%" value="" placeholder="Nick">
+      </td>
+    </tr>
+    <tr><td>
+        <input ng-model="user.pswd0" type="password" name="pswd0" size="25%" value="" placeholder="Password">
+      </td>
+    </tr>
+    <tr><td>
+        <input ng-model="user.pswd1" type="password" name="pswd1" size="25%" value="" placeholder="Confirm password">
+      </td>
+    </tr>    <tr><td>
+        <input ng-click="register(user)" id="login" type="submit" value="Register">
+      </td>
+    </tr>
+    <tr><td>
+        <span class="small" style="float:right;"><a href="#/forgot">Forgot</a> / <a href="#/">Login</a>
+        </span>
+
+      </td>
+    </tr>
+  </form>
+</table>
+
+  </div>
+</div>

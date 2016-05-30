@@ -1,0 +1,30 @@
+<div class="main light" >
+  <div id="body" class="container">
+    
+    <h1>Welcome {{ name }}</h1>
+    <p class="error">{{error.error}}</p>
+
+    <form novalidate class="simple-form">
+      <input type="text" size="32" placeholder="Link" ng-model="link" />
+      <input type="submit" ng-click="add(link)" value="Add" />
+    </form>
+    
+    <div ng-repeat="link in links" class="col-md-6">
+      <div class="thumbnail">
+        
+        <p class="title">
+          <a target="_blank" href="{{ link.link }}">
+          <img align="top" ng-src="{{ link.favicon }}" width="16" height="16" />
+          <span align="middle">
+            {{ link.title }}
+          </span>
+          </a>
+         <img style="cursor: pointer;" align="middle" ng-click="del($index)" src="/static/img/x.png" width="20" height="20" />
+
+        </p>
+        
+      </div>
+    </div>
+    
+    </div>
+</div>

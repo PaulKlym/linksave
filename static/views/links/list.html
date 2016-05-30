@@ -1,0 +1,42 @@
+<div class="main light" >
+  <div id="body" >
+    
+    <h1>Welcome {{ user.nick }}</h1>
+    <p style="color: red" class="error">{{error.error}}</p>
+
+
+<table width="100%">
+  <tr>
+      <form novalidate class="simple-form">
+        <td>
+          <input id="linkField" type="text"
+                 style="display:table-cell; width:100%"
+                 placeholder="Link"
+                 ng-model="link"
+                 onClick="this.select();"
+                 onkeydown="if (event.keyCode == 13)
+                                document.getElementById('addLink').click()" />
+        </td>
+        <td>
+          <img ng-show="dataLoading" width="28" height="28" src="/static/img/loader.gif"/>
+          <img ng-show="!dataLoading" id="addLink" style="cursor:pointer;" ng-click="add(link)" src="/static/img/add.png" height="28" width="28"/>
+        </td>
+      </form>
+      </tr>
+      
+    <tr ng-repeat="link in links" class="col-md-6">
+      <td>
+          <a style="display:block;" target="_blank" href="{{ link.link }}">
+          <img align="top" ng-src="{{ link.favicon }}" width="16" height="16" />
+          {{ link.title }}
+          </a>
+      </td>
+      <td>
+         <img style="cursor: pointer;" align="middle" ng-click="del($index)" src="/static/img/x.png" width="28" height="28" />
+      </td>
+      
+    </tr>
+    </table>
+    
+    </div>
+</div>
