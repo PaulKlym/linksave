@@ -6,5 +6,5 @@ if __name__ == '__main__':
        port = int(os.environ['OPENSHIFT_PYTHON_PORT'])
        app = imp.load_source('app', 'links.py')
 
-       app.application.listen(port , ip)
+       app.app.listen(port , ip)
        app.ioloop.IOLoop.instance().start()
