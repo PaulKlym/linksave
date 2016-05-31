@@ -95,7 +95,11 @@ class UserHandler(BaseHandler):
 
 class RegisterHandler(BaseHandler):
     def post(self):
-        user = json.loads(self.request.body.decode())
+        if not self.request.body:
+            return ret_error(self, 'Empty fields')
+        fields = json.loads(self.request.body.decode())
+        user = {k: v.strip() for k,v in fields.items()}
+
         if 'email' not in user:
             return ret_error(self, 'No email field')
         if 'pswd0' not in user:
@@ -108,11 +112,8 @@ class RegisterHandler(BaseHandler):
             return ret_error(self, 'Not valid email')
         if not 8 <= len(user['pswd0']) <= 32:
             return ret_error(self, 'Invalid password length, must be between 8 and 32')
-        if 'nick' not in user:
-            return ret_error(self, 'No nick field')
-        if not 1 <= len(user['nick']) <= 64:
-            return ret_error(self, 'Nickname must be at least 1 character and less 64 chars')
-        # todo if no nick (strip nick) then use email
+        if 'nick' not in user or not user['nick']:
+            user['nick'] = user['email']
         u = db.users.find_one({"email": user['email']})
         if u:
             return ret_error(self, 'User with such email exist already')

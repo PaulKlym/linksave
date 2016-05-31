@@ -1,20 +1,22 @@
 <div class="main light" ng-controller="LoginController">
   <div id="body" class="container">
-
+    
 <table width="25%">
   <form novalidate class="simple-form">
     <tr>
       <td>
-        <h1>Welcome</h1>
+        <h2>Welcome</h2>
       </td>
-
     </tr>
+    <tr><td>
+    <p class="error">{{error.error}}</p>
+</td></tr>
     <tr><td>
         <input ng-model="user.email" type="text" name="email" size="25%" value="" placeholder="Email">
       </td>
     </tr>
     <tr><td>
-        <input ng-model="user.nick" type="text" name="nick" size="25%" value="" placeholder="Nick">
+        <input ng-model="user.nick" type="text" name="nick" size="25%" value="" placeholder="Nick (optional)">
       </td>
     </tr>
     <tr><td>
@@ -22,14 +24,16 @@
       </td>
     </tr>
     <tr><td>
-        <input ng-model="user.pswd1" type="password" name="pswd1" size="25%" value="" placeholder="Confirm password">
+        <input ng-model="user.pswd1" type="password" name="pswd1" size="25%" value="" placeholder="Confirm password"
+            onkeydown="if (event.keyCode == 13)
+                                document.getElementById('login').click()">
       </td>
     </tr>    <tr><td>
         <input ng-click="register(user)" id="login" type="submit" value="Register">
       </td>
     </tr>
     <tr><td>
-        <span class="small" style="float:right;"><a href="#/forgot">Forgot</a> / <a href="#/">Login</a>
+        <span class="small" style="float:right;"><a href="#/forget">Forgot</a> / <a href="#/login">Login</a>
         </span>
 
       </td>

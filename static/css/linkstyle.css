@@ -6,6 +6,7 @@ input {
     padding: 4px 10px 4px 10px;
     background-color: #f4f5f7;
 }
+
 hr {
     display: block;
     height: 1px;
@@ -14,11 +15,25 @@ hr {
     margin: 1em 0;
     padding: 0;
 }
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 300;
+    src: local("/static/font/OpenSans-Light.ttf"), format("truetype");
+    unicode-range: U+0-FF, U+131, U+152-153, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
 body {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: "Lucida Sans Unicode", "Open Sans", "Lucida Grande", sans-serif;
     margin: 0 0 0 0;
     /*height: 100%;*/
 
+}
+
+.error {
+    font-size: 0.7em;
+    color: red;
 }
 
 .addT {
@@ -34,6 +49,8 @@ body {
     color: #6bc7ef;
     font-size: 0.7em;
 }
+
+
 
 #header {
     max-width: 800px;
@@ -75,7 +92,7 @@ body {
    
     margin-right: auto;
     margin-left: auto;
-    color: #C9C9C9;
+    color: #707070;
     text-align: center;
 }
 
@@ -212,6 +229,7 @@ body {
 
 .dark_foot {
     margin-top: 50px;
+    margin-bottom: 32px;
     width: 100%;
     clear: both;
     height: 25px;

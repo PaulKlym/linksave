@@ -27,8 +27,12 @@ app.config(['$routeProvider', function($routeProvider) {
 app.controller('RegisterController',
                ['$scope', '$http', '$location', '$cookies',
                 function($scope, $http, $location, $cookies) {
+                   //  if ($cookies.token != '' || $cookies.token != null || $cookies.token != undefined) {
+                   //      $location.path("/");
+                   //      return
+                   // }
+
                     $scope.register = function(user) {
-                        
                        $http.post("/api/v1.0/register", user)
                            .success(function(data, status, headers, config) {
                                $location.path("/login");
@@ -42,7 +46,11 @@ app.controller('RegisterController',
 app.controller('LoginController',
                ['$scope', '$http', '$location', '$cookies', '$rootScope',
                 function($scope, $http, $location, $cookies, $rootScope) {
-                    // $rootScope.isLogin = 'Login';
+
+                   //  if ($cookies.token != '' || $cookies.token != null || $cookies.token != undefined) {
+                   //      $location.path("/");
+                   //      return
+                   // }
                     $scope.login = function(user) {
                        $http.post("/api/v1.0/login", user)
                            .success(function(data, status, headers, config) {
@@ -63,10 +71,12 @@ app.controller('LogoutController',
                ['$scope', '$http', '$location', '$cookies', '$rootScope',
                 function($scope, $http, $location, $cookies, $rootScope) {
                     $rootScope.isLogin = 'Login';
-
+                  
                     $http.get("/api/v1.0/logout?token=" + $cookies.token)
                         .success(function(data, status, headers, config) {
                             $cookies.token = '';
+                            $scope.user = undefined;
+                            $scope.links = undefined;
                             $location.path("/login");
                         }).error(function(data, status, headers, config) {
                             $cookies.token = '';
@@ -78,13 +88,22 @@ app.controller('LogoutController',
 app.controller('MainController',
                ['$scope', '$http', '$location', '$cookies', '$rootScope',
                 function($scope, $http, $location, $cookies, $rootScope) {
+                    // if ($cookies.token == '' || $cookies.token == null || $cookies.token == undefined) {
+                    //             $location.path("/login");
+                    // }
+  
                     if ($scope.user == undefined) {
                     $http.get('/api/v1.0/user?token=' + $cookies.token)
                             .success(function(data, status, headers, config) {
-                            $scope.user = data;
+                                $scope.user = data;
+                                $scope.loaded = true;
                             $rootScope.isLogin = 'hi ' + $scope.user.nick;
                         }).error(function(data, status, headers, config) {
-                            $rootScope.isLogin = 'Logout';
+                            if (status == 403) {
+                                $rootScope.isLogin = 'Login';
+                                $location.path("/login");
+                                return
+                            }
                             $scope.error = data;
                         });
                     }
