@@ -19,8 +19,11 @@ from bson import json_util
 from bson.objectid import ObjectId
 
 
-MONGODB_URL = 'mongodb://localhost:27017/'
-MONGODB_NAME = 'linksave'
+MONGODB_URL = os.environ.get('OPENSHIFT_MONGODB_DB_URL') if os.environ.get('OPENSHIFT_MONGODB_DB_URL') else 'mongodb://localhost:27017/'
+MONGODB_NAME = os.environ.get('OPENSHIFT_APP_NAME') if os.environ.get('OPENSHIFT_APP_NAME') else 'linksave'
+
+# MONGODB_URL = 'mongodb://localhost:27017/'
+# MONGODB_NAME = 'linksave'
 
 client = MongoClient(MONGODB_URL)
 db = client[MONGODB_NAME]
@@ -209,25 +212,26 @@ def ret_error(s, msg, code=400):
     s.write(json.dumps(error,default=json_util.default))
     s.finish()
 
-
-async def get_favicon(url):
+@gen.coroutine
+def get_favicon(url):
     parsed = urlparse(url)
     if parsed.scheme and parsed.netloc:
         path = '{uri.scheme}://{uri.netloc}/favicon.ico'.format(uri=parsed)
 
         client = httpclient.AsyncHTTPClient()
         try:
-            await client.fetch(path)
+            yield client.fetch(path)
             return path
         except:
             pass
     return '/static/img/default'
 
-async def get_title(url):
+@gen.coroutine
+def get_title(url):
     # if link don't starts with http try with one
     try:
         client = httpclient.AsyncHTTPClient()
-        response = await client.fetch(url)
+        response = yield client.fetch(url)
         html = bs4.BeautifulSoup(response.body, 'html.parser')
         return html.title.text
     except:

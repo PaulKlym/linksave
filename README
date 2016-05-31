@@ -1,0 +1,1 @@
+Server for saving links. Backend - python, tornado, rest api, mongodb. Frontend - angularjs.
