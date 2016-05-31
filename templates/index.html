@@ -7,30 +7,49 @@
     <title>Linksave</title>
 
 </head>
-<body>
+  <body>
 
-<div class="dark">
-    <div id="header">
-      <a class="head" href="#/">Linksave</a>
-        <!-- <a class="head" href="#/settings">settings</a> -->
 
-        <a style="float:right; padding-right: 10px" ng-init="$root.isLogin='Login'" class="head" href="#/logout">{{ $root.isLogin }}</a>
-<hr></hr>
+<!-- <div class="dark"> -->
+<!--   <div id="header"> -->
+    <nav role='navigation'>
+      <ul>
+        <li><a href="#/">Linksave</a></li>
+        <li><a href="#/about">About</a></li>
+        <li><a href="#/contact">Contact</a></li>
+        <li ng-show="$root.isLogin == 'Login'"><a href="#/login">Login</a></li>
+        <li ng-show="$root.isLogin != 'Login'"><a style="color: #6bc7ef" href="">{{ $root.isLogin }}</a>
+          <ul>
+            <li><a href="#/settings">Settings</a></li>
+            <li><a href="#/logout">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+      </nav>  
+    
+<!--       <a class="head" href="#/">Linksave</a> -->
+<!--         <\!-- <a class="head" href="#/settings">settings</a> -\-> -->
+
+<!--         <a style="float:right; padding-right: 10px" ng-init="$root.isLogin='Login'" class="head" href="#/logout">{{ $root.isLogin }}</a> -->
+<!-- <hr></hr> -->
         
-    </div>
-</div>
+<!--     </div> -->
+<!-- </div> -->
 
 
 
-<div ng-view></div>
+<div id="cont" ng-view></div>
 
 
 
-<div class="dark_foot">
-    <div id="footer">
+<!-- <div class="dark_foot"> -->
+<!--     <div id="footer"> -->
+<!--     </div> -->
+<!-- </div> -->
+
+<footer>
         Linksave | 2016
-    </div>
-</div>
+</footer>
 
 
 
