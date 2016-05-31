@@ -67,48 +67,6 @@ class BaseHandler(web.RequestHandler):
         return db.tokens.find_one(token) if token else None
 
 
-class LinksHandler(BaseHandler):
-    @authenticated
-    def get(self):
-        log.i(self.current_user['user_id'])
-        offset = int(self.get_argument('offset', 0))
-        limit = int(self.get_argument('limit', 40))
-        links = db.__getattr__('links{}'.format(
-            self.current_user['user_id'])).find().sort([
-                ('$natural', -1)
-            ]).skip(offset).limit(limit)
-        self.set_header('Content-Type', 'application/json')
-        self.write(json.dumps(list(links),default=json_util.default))
-
-    @mes
-    @authenticated
-    def post(self):
-        link_data = json.loads(self.request.body.decode())
-        if 'link' not in link_data:
-            return ret_error(self, 'Missing field <link>')
-
-        link_data['date'] = datetime.now()
-        link_data['title'] = get_title(link_data['link'])
-        link_data['favicon'] = get_favicon(link_data['link'])
-
-        db.__getattr__('links{}'.format(self.current_user['user_id'])).save(link_data)
-        
-        self.set_header('Content-Type', 'application/json')
-        self.set_status(201)
-        self.write(json.dumps(link_data,default=json_util.default))
-
-    def delete(self, id):
-        if id:
-            db.__getattr__('links{}'.format(
-                self.current_user['user_id'])).remove(
-                    {'_id':ObjectId(str(id))})
-        else:
-            ret_error(self, 'Invalid link id')
-
-def f(x):
-    x[0](x[1])
-
-
 class UserHandler(BaseHandler):    
     @authenticated
     def get(self):
@@ -151,6 +109,7 @@ class RegisterHandler(BaseHandler):
             return ret_error(self, 'No nick field')
         if not 1 <= len(user['nick']) <= 64:
             return ret_error(self, 'Nickname must be at least 1 character and less 64 chars')
+        # todo if no nick (strip nick) then use email
         u = db.users.find_one({"email": user['email']})
         if u:
             return ret_error(self, 'User with such email exist already')
@@ -159,6 +118,7 @@ class RegisterHandler(BaseHandler):
         del user['pswd1']
         del user['pswd0']
         db.users.save(user)
+
 
 class LoginHandler(BaseHandler):
     def post(self):
@@ -191,6 +151,55 @@ class LogoutHandler(BaseHandler):
     def get(self):
         db.tokens.remove(self.current_user['_id'])
 
+
+class LinksHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        # log.i(self.current_user['user_id'])
+        offset = int(self.get_argument('offset', 0))
+        limit = int(self.get_argument('limit', 40))
+        links = db.__getattr__('links{}'.format(
+            self.current_user['user_id'])).find().sort([
+                ('$natural', -1)
+            ]).skip(offset).limit(limit)
+        self.set_header('Content-Type', 'application/json')
+        self.write(json.dumps(list(links),default=json_util.default))
+
+    @authenticated
+    @gen.coroutine
+    def post(self):
+        t = time.time()
+
+        link_data = json.loads(self.request.body.decode())
+        if 'link' not in link_data:
+            return ret_error(self, 'Missing field <link>')
+
+        link = link_data['link']
+
+        link_data['date'] = datetime.now()
+        link_data['title'], link_data['favicon'] = yield [get_title(link), get_favicon(link)]
+
+        if not link.startswith('http'):
+            link_data['link'] = ''
+
+        db.__getattr__('links{}'.format(self.current_user['user_id'])).save(link_data)
+        
+        self.set_header('Content-Type', 'application/json')
+        self.set_status(201)
+        self.write(json.dumps(link_data,default=json_util.default))
+
+        log.i('Done in {:.2}s'.format(time.time() - t))
+
+
+    def delete(self, id):
+        if id:
+            db.__getattr__('links{}'.format(
+                self.current_user['user_id'])).remove(
+                    {'_id':ObjectId(str(id))})
+        else:
+            ret_error(self, 'Invalid link id')
+
+
 def ret_error(s, msg, code=400):
     error = {
         "code": code,
@@ -200,32 +209,26 @@ def ret_error(s, msg, code=400):
     s.write(json.dumps(error,default=json_util.default))
     s.finish()
 
-@mes
-def get_favicon(url):
+
+async def get_favicon(url):
     parsed = urlparse(url)
     if parsed.scheme and parsed.netloc:
         path = '{uri.scheme}://{uri.netloc}/favicon.ico'.format(uri=parsed)
-        if url_exists(path):
+
+        client = httpclient.AsyncHTTPClient()
+        try:
+            await client.fetch(path)
             return path
+        except:
+            pass
     return '/static/img/default'
 
-@mes
-def url_exists(path):
-    try:
-        requests.get(path, stream=True, timeout=1)
-        return True
-    except:
-        return False
-
-
-@mes
-def get_title(url):
+async def get_title(url):
     # if link don't starts with http try with one
     try:
-        r = requests.get(url, stream=True, timeout=1)
-        for c in r.iter_content(chunk_size=512):
-            html = bs4.BeautifulSoup(c, 'html.parser')
-            if html.title.text: break
+        client = httpclient.AsyncHTTPClient()
+        response = await client.fetch(url)
+        html = bs4.BeautifulSoup(response.body, 'html.parser')
         return html.title.text
     except:
         return url[:64]
@@ -235,7 +238,7 @@ settings = {
     'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
     'static_path': os.path.join(os.path.dirname(__file__), 'static'),
     'debug': True,
-    'login_url': '/api/v1.0/login'
+    # 'login_url': '/api/v1.0/login'
 }
 
 app = web.Application([

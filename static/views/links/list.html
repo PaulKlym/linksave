@@ -1,16 +1,15 @@
 <div class="main light" >
   <div id="body" >
     
-    <h1>Welcome {{ user.nick }}</h1>
     <p style="color: red" class="error">{{error.error}}</p>
 
 
-<table width="100%">
+<table width="100%" cellpadding="10">
   <tr>
       <form novalidate class="simple-form">
         <td>
           <input id="linkField" type="text"
-                 style="display:table-cell; width:100%"
+                 style="display:table-cell; width:96%;"
                  placeholder="Link"
                  ng-model="link"
                  onClick="this.select();"
@@ -19,12 +18,16 @@
         </td>
         <td>
           <img ng-show="dataLoading" width="28" height="28" src="/static/img/loader.gif"/>
-          <img ng-show="!dataLoading" id="addLink" style="cursor:pointer;" ng-click="add(link)" src="/static/img/add.png" height="28" width="28"/>
+          <span id="addLink"
+                class="addT"
+                ng-click="add(link)"
+                ng-show="!dataLoading">add</span>
         </td>
       </form>
       </tr>
-      
-    <tr ng-repeat="link in links" class="col-md-6">
+
+  <tr ng-repeat="link in links" class="col-md-6"
+      >
       <td>
           <a style="display:block;" target="_blank" href="{{ link.link }}">
           <img align="top" ng-src="{{ link.favicon }}" width="16" height="16" />
@@ -32,11 +35,21 @@
           </a>
       </td>
       <td>
-         <img style="cursor: pointer;" align="middle" ng-click="del($index)" src="/static/img/x.png" width="28" height="28" />
+        <span class="deleteT" ng-click="del($index)">delete</span>
       </td>
       
     </tr>
     </table>
-    
+<div style="padding-top:16px;">
+  <span id="addLink"
+          class="addT"
+          ng-click="prev()"
+          ng-show="isPrev">prev page</span>
+  <span id="addLink"
+        style="float: right;"
+          class="addT"
+          ng-click="next()"
+          ng-show="isNext">next page</span>
+</div>
     </div>
 </div>

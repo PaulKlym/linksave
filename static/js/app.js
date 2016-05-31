@@ -80,19 +80,21 @@ app.controller('MainController',
                 function($scope, $http, $location, $cookies, $rootScope) {
                     if ($scope.user == undefined) {
                     $http.get('/api/v1.0/user?token=' + $cookies.token)
-                        .success(function(data, status, headers, config) {
+                            .success(function(data, status, headers, config) {
                             $scope.user = data;
+                            $rootScope.isLogin = 'hi ' + $scope.user.nick;
                         }).error(function(data, status, headers, config) {
+                            $rootScope.isLogin = 'Logout';
                             $scope.error = data;
                         });
                     }
                     
                     document.getElementById("linkField").focus();
-
-                    $rootScope.isLogin = 'Logout';
+                    $scope.offset = 0;
 
                     $scope.dataLoading = false;
-                    $http.get("/api/v1.0/links?token=" + $cookies.token)
+                    $scope.update = function(offset) {
+                        $http.get("/api/v1.0/links?token=" + $cookies.token + "&offset=" + offset )
                         .success(function(data, status, headers, config) {
                             $scope.links = data;
                         }).error(function(data, status, headers, config) {
@@ -102,7 +104,40 @@ app.controller('MainController',
                             }
                             $scope.error = data;
                         });
+                    }
 
+                    
+                    $scope.update($scope.offset)
+
+
+
+
+                    var limit = 4;                    
+                    $scope.next = function() {
+                        $scope.offset = $scope.offset + $scope.links.length;
+                        if ($scope.offset >= limit) {
+                            $scope.isPrev = true;
+                        }
+                        $scope.update($scope.offset)
+                        if ($scope.links.length < limit) {
+                            $scope.isNext = false;
+                        }
+                    }
+                    $scope.prev = function() {
+                        $scope.offset = $scope.offset - limit;
+                        if ($scope.offset <= 0) {
+                            $scope.offset = 0;
+                            $scope.isPrev = false;
+                        }
+                        $scope.update($scope.offset);
+                    }
+                    $scope.isNext = true
+                    $scope.isPrev = false
+
+
+
+
+                    
                     $scope.del = function(i) {
                         $http.delete("/api/v1.0/links/" + $scope.links[i]['_id']['$oid'] + "?token=" + $cookies.token)
                             .success(function(data, status, headers, config) {
@@ -114,6 +149,9 @@ app.controller('MainController',
 
                     $scope.add = function(l) {
                         if ($scope.dataLoading) return;
+                        l = $.trim(l)
+                        if (l == '' || l == undefined || l == null)
+                            return
                         $scope.dataLoading = true;
                         $http.post("/api/v1.0/links?token=" + $cookies.token, {link: l})
                             .success(function(data, status, headers, config) {
@@ -127,3 +165,7 @@ app.controller('MainController',
                        $scope.link = ''
                    };
                }]);
+
+$(window).focus(function() {
+    document.getElementById("linkField").focus();
+});

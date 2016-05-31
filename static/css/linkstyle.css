@@ -1,4 +1,19 @@
-
+input {
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    border-style: none;
+    padding: 4px 10px 4px 10px;
+    background-color: #f4f5f7;
+}
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
 body {
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     margin: 0 0 0 0;
@@ -6,8 +21,22 @@ body {
 
 }
 
+.addT {
+    cursor: pointer;
+    align: center;
+    color: #6bc7ef;
+    font-size: 0.9em;
+    
+}
+
+.deleteT {
+    cursor:pointer;
+    color: #6bc7ef;
+    font-size: 0.7em;
+}
+
 #header {
-    max-width: 600px;
+    max-width: 800px;
     min-width: 400px;
     /*width: 908px;*/
     height: 40px;
@@ -16,9 +45,9 @@ body {
     /*z-index: 1;*/
     margin-right: auto;
     margin-left: auto;
-    text-align: center;
     vertical-align: middle;
     line-height: 40px;
+    font-size: 0.9em;
 }
 
 #logo {
@@ -27,7 +56,7 @@ body {
 
 #body {
     display: block;
-    max-width: 600px;
+    max-width: 800px;
     min-width: 400px;
     margin-right: auto;
     margin-left: auto;
@@ -53,7 +82,8 @@ body {
 #login {
     color: white;
     font-size: 0.8em;
-    height: 20px;
+    padding: 4px 10px 4px 10px;
+    cursor:pointer;
     background-color: #666666;
     float: right;
     border: none;
@@ -170,31 +200,30 @@ body {
 }
 
 .light {
-    background-lor: #ffffff;
+    background-color: #ffffff;
     width: 100%;
 }
 
 .dark {
-    background-color: #666666;
     width: 100%;
     margin: 0 auto;
+    margin-bottom: 40px;
 }
 
 .dark_foot {
     margin-top: 50px;
-    background-color: #666666;
     width: 100%;
     clear: both;
     height: 25px;
 }
 
 a.head:link {
-    color: #ffffff;
+    color: #6bc7ef;
     text-decoration: none;
 }
 
 a.head:visited {
-    color: #ffffff;
+    color: #6bc7ef;
     text-decoration: none;
 }
 a.head:hover {
@@ -217,8 +246,8 @@ a.head:active {
 }
 
 .head {
-    padding-right: 20px;
-    padding-left: 20px;
+    padding-right: 16px;
+    padding-left: 16px;
 }
 
 .small {
