@@ -25,19 +25,34 @@ hr {
     unicode-range: U+0-FF, U+131, U+152-153, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
+html {
+    height: 98%;
+}
+
 body {
     font-family: "Lucida Sans Unicode", "Open Sans", "Lucida Grande", sans-serif;
     margin: 0 0 0 0;
+
+    display: flex;
+    flex-direction: column;
+    height: 98%;
+          
+}
+
+header {
+    flex: 0 0 auto;
 }
 
 table {
     font-size: 0.8em;
 }
 
+#cont {
+   flex: 1 0 auto;
+}
 footer {
     display: block;
     min-width: 800px;
-    height: 25px;
     line-height: 25px;
     font-size: 0.7em;
     vertical-align: middle;
@@ -46,73 +61,29 @@ footer {
    
     margin-right: auto;
     margin-left: auto;
-    /* margin-top: 50px; */
-    /* margin-bottom: 32px; */
     width: 100%;
 
     clear: both;
 
-    position: relative;
-    z-index: 10;
-    height: 3em;
-    margin-top: -3em;
+    /* height: 25px; */
+    
+    /* height: 2%; */
+    padding-bottom: 16px;
+    flex: 0 0 auto;
+
 }
 
-/* html, body, #cont { height: 100%; } */
-/* body > #cont { height: auto; min-height: 100%; } */
-
 /* ####################-MENU-######################*/
-/* *, *:before, *:after{ */
-/*                  -webkit-box-sizing: border-box; */
-/*                  -moz-box-sizing: border-box; */
-/*                  box-sizing: border-box; */
-/*                  padding: 0; */
-/*                  margin: 0; */
-/*              } */
-
-/*| Navigation |*/
-
-
-/* .dark { */
-/*     width: 100%; */
-/*     margin: 0 auto; */
-/*     margin-bottom: 40px; */
-/* } */
-
-/* #header { */
-/*     max-width: 800px; */
-/*     min-width: 400px; */
-/*     /\*width: 908px;*\/ */
-/*     height: 40px; */
-/*     display: block; */
-/*     /\*position: fixed;*\/ */
-/*     /\*z-index: 1;*\/ */
-/*     margin-right: auto; */
-/*     margin-left: auto; */
-/*     vertical-align: middle; */
-/*     line-height: 40px; */
-/*     font-size: 0.9em; */
-/* } */
 
 nav{
     max-width: 800px;
     min-width: 400px;
-    /*width: 908px;*/
     height: 40px;
     display: block;
-    /*position: fixed;*/
-    /*z-index: 1;*/
     margin-right: auto;
     margin-left: auto;
     vertical-align: middle;
     line-height: 40px;
-    /* position: fixed; */
-    /* top: 0; */
-    /* left: 0; */
-    /* width: 100%; */
-    /* background: #fff; */
-    /* box-shadow: 0 3px 10px -2px rgba(0,0,0,.1); */
-    /* border: 1px solid rgba(0,0,0,.1); */
 }
 nav ul{
     list-style: none;
@@ -120,7 +91,6 @@ nav ul{
     float: right;
     padding: 0px;
     margin-top: 0px;
-    /* margin-right: 100px; */
     display: inline-table;
 }
 nav ul li{
