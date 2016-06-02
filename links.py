@@ -98,7 +98,10 @@ class RegisterHandler(BaseHandler):
         if not self.request.body:
             return ret_error(self, 'Empty fields')
         fields = json.loads(self.request.body.decode())
-        user = {k: v.strip() for k,v in fields.items()}
+        try:
+            user = {k: v.strip() for k,v in fields.items()}
+        except AttributeError:
+            return ret_error(self, 'Invalid field type')
 
         if 'email' not in user:
             return ret_error(self, 'No email field')
@@ -121,7 +124,7 @@ class RegisterHandler(BaseHandler):
         user['date'] = datetime.now()
         del user['pswd1']
         del user['pswd0']
-        db.users.save(user)
+        db.users.insert_one(user)
 
 
 class LoginHandler(BaseHandler):
@@ -246,7 +249,8 @@ settings = {
     # 'login_url': '/api/v1.0/login'
 }
 
-app = web.Application([
+def make_app():
+    return web.Application([
     (r'/', IndexHandler),
     (r'/index', IndexHandler),
     (r'/api/v1.0/links/?', LinksHandler),
@@ -257,6 +261,8 @@ app = web.Application([
     (r'/api/v1.0/user', UserHandler)
 ], **settings)
 
+
 if __name__ == '__main__':
+    app = make_app()
     app.listen(8080)
-    ioloop.IOLoop.instance().start()
+    ioloop.IOLoop.current().start()

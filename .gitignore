@@ -9,3 +9,5 @@ venv
 #*.*
 .#*
 todo
+.coverage
+run_tests.sh
