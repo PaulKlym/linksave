@@ -193,6 +193,8 @@ app.controller('MainController',
                }]);
 
 $(window).focus(function() {
-    document.getElementById("linkField").focus();
+    var e = document.getElementById("linkField");
+    e.focus();
+    e.select();
 });
 
