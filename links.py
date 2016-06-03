@@ -124,7 +124,7 @@ class RegisterHandler(BaseHandler):
         user['date'] = datetime.now()
         del user['pswd1']
         del user['pswd0']
-        db.users.insert_one(user)
+        db.users.save(user)
 
 
 class LoginHandler(BaseHandler):
