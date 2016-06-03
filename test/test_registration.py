@@ -46,7 +46,7 @@ class RegisterTestCase(AsyncHTTPTestCase):
         user = {'email': 'test@mail.ru', 'nick':'', 'pswd0': 'qwerasdf', 'pswd1': 'qwerasdf'}
         
         response = self.post('register', user)
-        mock_mongo.users.insert_one.assert_called_once_with(mock.ANY)
+        mock_mongo.users.save.assert_called_once_with(mock.ANY)
         self.assertEqual(response.code, 200)
 
     @mock.patch('links.db')
@@ -54,7 +54,7 @@ class RegisterTestCase(AsyncHTTPTestCase):
         mock_mongo.users.find_one.return_value = False
         def side_effect(user):
             if user['nick'] != user['email']: raise Exception()
-        mock_mongo.users.insert_one.side_effect = side_effect
+        mock_mongo.users.save.side_effect = side_effect
         user = {'email': 'test@mail.ru', 'nick':'', 'pswd0': 'qwerasdf', 'pswd1': 'qwerasdf'}        
         response = self.post('register', user)
         self.assertEqual(response.code, 200)
